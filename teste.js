@@ -52,7 +52,7 @@ const express = require('express');
 const app = express();
 const handlebars = require('express-handlebars');
 const bodyParser = require('body-parser');
-
+const Post = require('./models/Post')
 // config
 
     // template engine
@@ -64,13 +64,24 @@ const bodyParser = require('body-parser');
         app.use(bodyParser.json());
 
     // Rotas    
-            app.get('/cadastro', (req, res) => {
-                res.render("formulario")
-            })
+        app.get("/postDone", (req, res) => {
+            res.render("done")
+        })
+
+        app.get('/cadastro', (req, res) => {
+            res.render("formulario")
+        })
 
     // Rota para recebimento de dados do formulário 
         app.post('/add', (req,res) => {
-                res.send("FORMULÁRIO RECEBIDO!")
+            Post.create({
+                titulo: req.body.titulo,
+                conteudo: req.body.conteudo
+            }).then(() => {
+                res.redirect("/postDone")
+            }).catch((erro) => {
+                res.send("Houve um erro " + erro)
+            })
         })
 
 
