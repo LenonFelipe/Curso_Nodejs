@@ -64,8 +64,10 @@ const Post = require('./models/Post')
         app.use(bodyParser.json());
 
     // Rotas    
-        app.get("/postDone", (req, res) => {
-            res.render("done")
+        app.get("/", (req, res) => {
+            Post.findAll().then((posts) => {
+                res.render("done", {posts: posts})
+            })
         })
 
         app.get('/cadastro', (req, res) => {
@@ -78,7 +80,7 @@ const Post = require('./models/Post')
                 titulo: req.body.titulo,
                 conteudo: req.body.conteudo
             }).then(() => {
-                res.redirect("/postDone")
+                res.redirect("/")
             }).catch((erro) => {
                 res.send("Houve um erro " + erro)
             })
