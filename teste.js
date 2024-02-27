@@ -56,7 +56,9 @@ const Post = require('./models/Post')
 // config
 
     // template engine
-        app.engine('handlebars', handlebars.engine(({defaultLayout: 'main'})));
+        app.engine('handlebars', handlebars.engine(({defaultLayout: 'main', runtimeOptions: {
+            allowProtoPropertiesByDefault: true, allowProtoMethodsByDefault: true,
+        }})));
         app.set('view engine', 'handlebars');
 
     // Body Parser
@@ -65,7 +67,8 @@ const Post = require('./models/Post')
 
     // Rotas    
         app.get("/", (req, res) => {
-            Post.findAll().then((posts) => {
+            Post.findAll({order: [["id", "DESC"]]}).then((posts) => {
+                console.log(posts)
                 res.render("done", {posts: posts})
             })
         })
